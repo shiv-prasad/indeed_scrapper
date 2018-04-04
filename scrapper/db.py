@@ -98,8 +98,12 @@ def update_rows(query_for, key, values, add=False):
 
 def fetch_rows(query_for, status_for):
 
+    collection = None
+    mongo_query = None
+
     db = connect()
     queries = []  # Result Set
+
 
     if query_for == 'resume_scrap':  # For resumes links with extraction status
 
@@ -112,10 +116,6 @@ def fetch_rows(query_for, status_for):
         elif status_for == 'error':
             mongo_query = {settings.RESUMES_COLUMNS['scrap']: settings.HTML_EXTRACTION_ERROR}
 
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
-
     elif query_for == 'job_scrap':  # For jobs links with extraction status
 
         collection = db[settings.COL_JOBS]
@@ -126,10 +126,6 @@ def fetch_rows(query_for, status_for):
             mongo_query = {settings.JOBS_COLUMNS['scrap']: settings.HTML_EXTRACTION_DONE}
         elif status_for == 'error':
             mongo_query = {settings.JOBS_COLUMNS['scrap']: settings.HTML_EXTRACTION_ERROR}
-
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
 
     elif query_for == 'resume_parse':  # For resumes html with parse status
 
@@ -142,10 +138,6 @@ def fetch_rows(query_for, status_for):
         elif status_for == 'error':
             mongo_query = {settings.RESUMES_COLUMNS['parse']: settings.HTML_PARSING_ERROR}
 
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
-
     elif query_for == 'job_parse':  # For jobs html with parse status
 
         collection = db[settings.COL_JOBS]
@@ -156,10 +148,6 @@ def fetch_rows(query_for, status_for):
             mongo_query = {settings.JOBS_COLUMNS['parse']: settings.HTML_PARSING_DONE}
         elif status_for == 'error':
             mongo_query = {settings.JOBS_COLUMNS['parse']: settings.HTML_PARSING_ERROR}
-
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
 
     elif query_for == 'job_queries':
 
@@ -172,9 +160,84 @@ def fetch_rows(query_for, status_for):
         elif status_for == 'error':
             mongo_query = {settings.QUERIES_COLUMNS['job_status']: settings.LINK_EXTRACTION_ERROR}
 
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
+    elif query_for == 'resume_queries':
+
+        collection = db[settings.COL_QUERIES]
+
+        if status_for == 'pending':
+            mongo_query = {settings.QUERIES_COLUMNS['resume_status']: settings.LINK_EXTRACTION_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.QUERIES_COLUMNS['resume_status']: settings.LINK_EXTRACTION_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.QUERIES_COLUMNS['resume_status']: settings.LINK_EXTRACTION_ERROR}
+
+    cur = collection.find(mongo_query)
+    for doc in cur:
+        queries.append(doc)
+
+    return queries, len(queries)
+
+def fetch_count(query_for, status_for):
+
+    collection = None
+    mongo_query = None
+
+    db = connect()
+
+    if query_for == 'resume_scrap':  # For resumes links with extraction status
+
+        collection = db[settings.COL_RESUMES]
+
+        if status_for == 'pending':
+            mongo_query = {settings.RESUMES_COLUMNS['scrap']: settings.HTML_EXTRACTION_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.RESUMES_COLUMNS['scrap']: settings.HTML_EXTRACTION_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.RESUMES_COLUMNS['scrap']: settings.HTML_EXTRACTION_ERROR}
+
+    elif query_for == 'job_scrap':  # For jobs links with extraction status
+
+        collection = db[settings.COL_JOBS]
+
+        if status_for == 'pending':
+            mongo_query = {settings.JOBS_COLUMNS['scrap']: settings.HTML_EXTRACTION_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.JOBS_COLUMNS['scrap']: settings.HTML_EXTRACTION_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.JOBS_COLUMNS['scrap']: settings.HTML_EXTRACTION_ERROR}
+
+    elif query_for == 'resume_parse':  # For resumes html with parse status
+
+        collection = db[settings.COL_RESUMES]
+
+        if status_for == 'pending':
+            mongo_query = {settings.RESUMES_COLUMNS['parse']: settings.HTML_PARSING_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.RESUMES_COLUMNS['parse']: settings.HTML_PARSING_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.RESUMES_COLUMNS['parse']: settings.HTML_PARSING_ERROR}
+
+    elif query_for == 'job_parse':  # For jobs html with parse status
+
+        collection = db[settings.COL_JOBS]
+
+        if status_for == 'pending':
+            mongo_query = {settings.JOBS_COLUMNS['parse']: settings.HTML_PARSING_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.JOBS_COLUMNS['parse']: settings.HTML_PARSING_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.JOBS_COLUMNS['parse']: settings.HTML_PARSING_ERROR}
+
+    elif query_for == 'job_queries':
+
+        collection = db[settings.COL_QUERIES]
+
+        if status_for == 'pending':
+            mongo_query = {settings.QUERIES_COLUMNS['job_status']: settings.LINK_EXTRACTION_PENDING}
+        elif status_for == 'done':
+            mongo_query = {settings.QUERIES_COLUMNS['job_status']: settings.LINK_EXTRACTION_DONE}
+        elif status_for == 'error':
+            mongo_query = {settings.QUERIES_COLUMNS['job_status']: settings.LINK_EXTRACTION_ERROR}
 
     elif query_for == 'resume_queries':
 
@@ -187,9 +250,7 @@ def fetch_rows(query_for, status_for):
         elif status_for == 'error':
             mongo_query = {settings.QUERIES_COLUMNS['resume_status']: settings.LINK_EXTRACTION_ERROR}
 
-        cur = collection.find(mongo_query)
-        for doc in cur:
-            queries.append(doc)
+    count = collection.count(mongo_query)
 
-    return queries, len(queries)
+    return count
 
