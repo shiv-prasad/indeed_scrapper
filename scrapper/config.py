@@ -68,3 +68,10 @@ MAX_RESULTS_FOR_JOB = (MAX_PAGINATION * MAX_RESULTS_PER_JOB_PAGE)
 MAX_RESULTS_FOR_RESUME = (MAX_PAGINATION * MAX_RESULTS_PER_RESUME_PAGE)
 
 
+#################################################################
+#                   Local Settings (if exists)                  #
+#################################################################
+try:
+    from local_config import *
+except:
+   pass
