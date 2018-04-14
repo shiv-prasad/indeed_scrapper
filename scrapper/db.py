@@ -3,9 +3,18 @@ from pymongo import MongoClient
 
 
 def connect():
-    client = MongoClient(settings.HOST, settings.PORT)
+    client = MongoClient(settings.HOST, int(settings.PORT))
     db = client[settings.DB_NAME]
     return db
+
+
+def insert_queries(queries):
+
+    db = connect()
+    collection = db[settings.COL_QUERIES]
+
+    if len(queries) > 0:
+        collection.insert_many(queries)
 
 
 def insert_rows(query_for, rows, many=False):

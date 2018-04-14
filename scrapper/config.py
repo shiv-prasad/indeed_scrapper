@@ -9,11 +9,18 @@ LOGIN_USERNAME = ""
 LOGIN_PASSWORD = ""
 
 ## Webdriver
+WEBDRIVER_REQUIRED = False
 WEBDRIVER_EXECUTABLE_PATH = ""
 
 ## Base urls
 JOB_BASE_URL = ""
 RESUME_BASE_URL = ""
+
+## Queries Files
+JOB_QUERIES_INPUT_CSV_PATH = "path to csv containing job related queries"
+JOB_QUERIES_COLUMNS = ["q","l"]
+RESUME_QUERIES_INPUT_CSV_PATH = "path to csv containing resume related queries"
+RESUME_QUERIES_COLUMNS = []
 
 ## Database Settings
 # Basic
@@ -24,8 +31,7 @@ COL_QUERIES = ""
 COL_JOBS = ""
 COL_RESUMES = ""
 QUERIES_COLUMNS = {
-    "query": "query",
-    "location": "location",
+    "queries": "queries",
     "job_status": "job_status",
     "resume_status": "resume_status"
 }
