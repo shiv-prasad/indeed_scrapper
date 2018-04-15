@@ -17,91 +17,107 @@ def insert_queries(queries):
         collection.insert_many(queries)
 
 
-def insert_rows(query_for, rows, many=False):
-
-    collection = None
-    values = []
+def insert_jobs(jobs):
 
     db = connect()
+    collection = db[settings.COL_JOBS]
 
-    if many == True:
-        for row in rows:
-            values.append(row)
-    else:
-        values = [rows]
-
-    if query_for == 'jobs':
-
-        collection = db[settings.COL_JOBS]
-
-    elif query_for == 'resumes':
-
-        collection = db[settings.COL_RESUMES]
-
-    if len(values) > 0:
-        collection.insert_many(values)
+    if len(jobs) > 0:
+        collection.insert_many(jobs)
 
 
-def update_rows(query_for, key, values, add=False):
-
-    collection = None
-    set_value = None
+def insert_resumes(resumes):
 
     db = connect()
+    collection = db[settings.COL_RESUMES]
+
+    if len(resumes) > 0:
+        collection.insert_many(resumes)
+
+
+def update_job_queries(key, values):
+
+    db = connect()
+    collection = db[settings.COL_QUERIES]
     query = {
-        '_id': key
+        settings.UPDATE_KEY: key
     }
+    set_value = {
+        settings.QUERIES_COLUMNS['job_status']: values['status']
+    }
+    collection.update_one(query, {'$set': set_value}, upsert=False)
 
-    if query_for == 'update_job_queries':
 
-        collection = db[settings.COL_QUERIES]
-        set_value = {
-            settings.QUERIES_COLUMNS['job_status']: values['status']
-        }
+def update_resume_queries(key, values):
 
-    elif query_for == 'update_resume_queries':
+    db = connect()
+    collection = db[settings.COL_QUERIES]
+    query = {
+        settings.UPDATE_KEY: key
+    }
+    set_value = {
+        settings.QUERIES_COLUMNS['resume_status']: values['status']
+    }
+    collection.update_one(query, {'$set': set_value}, upsert=False)
 
-        collection = db[settings.COL_QUERIES]
-        set_value = {
-            settings.QUERIES_COLUMNS['resume_status']: values['status']
-        }
 
-    elif query_for == 'update_job_scrap':
+def update_job_scrap(key, values, add=False):
 
-        collection = db[settings.COL_JOBS]
-        set_value = {
-            settings.JOBS_COLUMNS['scrap']: values['status']
-        }
-        if add:
-            set_value[settings.JOBS_COLUMNS['html_content']] = values['content']
+    db = connect()
+    collection = db[settings.COL_JOBS]
+    query = {
+        settings.UPDATE_KEY: key
+    }
+    set_value = {
+        settings.JOBS_COLUMNS['scrap']: values['status']
+    }
+    if add:
+        set_value[settings.JOBS_COLUMNS['html_content']] = values['content']
+    collection.update_one(query, {'$set': set_value}, upsert=False)
 
-    elif query_for == 'update_job_parse':
 
-        collection = db[settings.COL_JOBS]
-        set_value = {
-            settings.JOBS_COLUMNS['parse']: values['status']
-        }
-        if add:
-            set_value[settings.JOBS_COLUMNS['parsed_content']] = values['content']
+def update_job_parse(key, values, add=False):
 
-    elif query_for == 'update_resume_scrap':
+    db = connect()
+    collection = db[settings.COL_JOBS]
+    query = {
+        settings.UPDATE_KEY: key
+    }
+    set_value = {
+        settings.JOBS_COLUMNS['parse']: values['status']
+    }
+    if add:
+        set_value[settings.JOBS_COLUMNS['parsed_content']] = values['content']
+    collection.update_one(query, {'$set': set_value}, upsert=False)
 
-        collection = db[settings.COL_RESUMES]
-        set_value = {
-            settings.RESUMES_COLUMNS['scrap']: values['status']
-        }
-        if add:
-            set_value[settings.RESUMES_COLUMNS['html_content']] = values['content']
 
-    elif query_for == 'update_resume_parse':
+def update_resume_scrap(key, values, add=False):
 
-        collection = db[settings.COL_RESUMES]
-        set_value = {
-            settings.RESUMES_COLUMNS['parse']: values['status']
-        }
-        if add:
-            set_value[settings.RESUMES_COLUMNS['parsed_content']] = values['content']
+    db = connect()
+    collection = db[settings.COL_RESUMES]
+    query = {
+        settings.UPDATE_KEY: key
+    }
+    set_value = {
+        settings.RESUMES_COLUMNS['scrap']: values['status']
+    }
+    if add:
+        set_value[settings.RESUMES_COLUMNS['html_content']] = values['content']
+    collection.update_one(query, {'$set': set_value}, upsert=False)
 
+
+def update_resume_scrap(key, values, add=False):
+
+    db = connect()
+    collection = db[settings.COL_RESUMES]
+    query = {
+        settings.UPDATE_KEY: key
+    }
+    set_value = {
+        settings.RESUMES_COLUMNS['parse']: values['status']
+    }
+    if add:
+        set_value[settings.RESUMES_COLUMNS['parsed_content']] = values['content']
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 

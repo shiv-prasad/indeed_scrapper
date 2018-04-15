@@ -23,6 +23,7 @@ RESUME_QUERIES_INPUT_CSV_PATH = "path to csv containing resume related queries"
 RESUME_QUERIES_COLUMNS = []
 
 ## Database Settings
+
 # Basic
 HOST = ""
 PORT = ""
@@ -49,6 +50,8 @@ JOBS_COLUMNS = {
     "parse": "parse_status",
     "parsed_content": "content"
 }
+UPDATE_KEY = '_id'
+
 # Status in models
 LINK_EXTRACTION_PENDING = "0"
 LINK_EXTRACTION_ERROR = "1"
