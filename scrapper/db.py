@@ -17,47 +17,34 @@ def insert_queries(queries):
         collection.insert_many(queries)
 
 
-def insert_jobs(jobs):
+def insert_rows(for_task, rows):
 
     db = connect()
-    collection = db[settings.COL_JOBS]
 
-    if len(jobs) > 0:
-        collection.insert_many(jobs)
+    if for_task == settings.TASKS[0]:
+        collection = db[settings.COL_JOBS]
+    else:
+        collection = db[settings.COL_RESUMES]
 
-
-def insert_resumes(resumes):
-
-    db = connect()
-    collection = db[settings.COL_RESUMES]
-
-    if len(resumes) > 0:
-        collection.insert_many(resumes)
+    if len(rows) > 0:
+        collection.insert_many(rows)
 
 
-def update_job_queries(key, values):
+def update_queries(for_task, key, values):
 
     db = connect()
     collection = db[settings.COL_QUERIES]
     query = {
         settings.UPDATE_KEY: key
     }
-    set_value = {
-        settings.QUERIES_COLUMNS['job_status']: values['status']
-    }
-    collection.update_one(query, {'$set': set_value}, upsert=False)
-
-
-def update_resume_queries(key, values):
-
-    db = connect()
-    collection = db[settings.COL_QUERIES]
-    query = {
-        settings.UPDATE_KEY: key
-    }
-    set_value = {
-        settings.QUERIES_COLUMNS['resume_status']: values['status']
-    }
+    if for_task == settings.TASKS[0]:
+        set_value = {
+            settings.QUERIES_COLUMNS['job_status']: values['status']
+        }
+    else:
+        set_value = {
+            settings.QUERIES_COLUMNS['resume_status']: values['status']
+        }
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
@@ -106,7 +93,7 @@ def update_resume_scrap(key, values, add=False):
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
-def update_resume_scrap(key, values, add=False):
+def update_resume_parse(key, values, add=False):
 
     db = connect()
     collection = db[settings.COL_RESUMES]
