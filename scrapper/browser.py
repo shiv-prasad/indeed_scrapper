@@ -58,7 +58,10 @@ def get_browser():
 
     else:
 
+        print "##################################################"
         print "Execution Running without login"
+        print "##################################################"
+
         return browser
 
 
