@@ -9,7 +9,7 @@ def fetch_job_link_url(queries, page_count):
     return url
 
 
-def fetch_resume_link(queries, page_count):
+def fetch_resume_link_url(queries, page_count):
     url = "{base_uri}?".format(base_uri=settings.RESUME_BASE_URL)
     for query in queries.keys():
         url += "{key}={value}&".format(key=query, value=queries[query])
