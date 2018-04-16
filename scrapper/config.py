@@ -21,6 +21,8 @@ NO_OF_PROCESSES = 10
 ## Base urls
 JOB_BASE_URL = ""
 RESUME_BASE_URL = ""
+JOB_HTML_BASE_URL = ""
+RESUME_HTML_BASE_URL = ""
 
 ## Queries Files
 JOB_QUERIES_INPUT_CSV_PATH = "path to csv containing job related queries"
