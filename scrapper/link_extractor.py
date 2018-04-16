@@ -1,6 +1,7 @@
 import config as settings
 import db as database_methods
 import link_scrapper
+from multiprocessing import Process
 
 
 if __name__ == '__main__':
@@ -21,6 +22,9 @@ if __name__ == '__main__':
 
             print "# For: <Jobs and Resumes>"
 
+            queries_jobs, total_jobs = database_methods.fetch_rows(query_for="job_queries", status_for="pending")
+            queries_resumes, total_resumes = database_methods.fetch_rows(query_for="resume_queries", status_for="pending")
+
             if settings.MULTIPROCESS_REQUIRED:
 
                 print "# Multiprocessing: <True>"
@@ -31,6 +35,11 @@ if __name__ == '__main__':
                     print "# Flow: <Jobs -> Resumes>"
                     print "# No. of processes for each flow: <{processes}>".format(processes=settings.NO_OF_PROCESSES)
 
+                    print "# Total Job Queries (Pending): <{total}>".format(total=total_jobs)
+                    link_scrapper.fetch_links(settings.TASKS[0], queries_jobs)
+                    print "# Total Resume Queries (Pending): <{total}>".format(total=total_resumes)
+                    link_scrapper.fetch_links(settings.TASKS[1], queries_resumes)
+
                 else:
 
                     print "# Type: <Shared>"
@@ -38,19 +47,25 @@ if __name__ == '__main__':
                     print "# No. of processes: <2>"
                     print "# No. of processes for each flow: <{processes}>".format(processes=settings.NO_OF_PROCESSES)
 
+                    print "# Total Job Queries (Pending): <{total}>".format(total=total_jobs)
+                    print "# Total Resume Queries (Pending): <{total}>".format(total=total_resumes)
+                    job_process = Process(target=link_scrapper.fetch_links, args=(settings.TASKS[0], queries_jobs,))
+                    resume_process = Process(target=link_scrapper.fetch_links, args=(settings.TASKS[1], queries_resumes,))
+
+                    job_process.start()
+                    resume_process.start()
+                    job_process.join()
+                    resume_process.join()
+
             else:
 
                 print "# Multiprocessing: <False>"
                 print "# Flow: <Jobs -> Resumes>"
 
-            queries_jobs, total_jobs = database_methods.fetch_rows(query_for="job_queries", status_for="pending")
-            print "# Total Job Queries (Pending): <{total}>".format(total=total_jobs)
-            link_scrapper.fetch_links(settings.TASKS[0], queries_jobs)
-
-            queries_resumes, total_resumes = database_methods.fetch_rows(query_for="resume_queries", status_for="pending")
-            print "# Total Resume Queries (Pending): <{total}>".format(total=total_resumes)
-            link_scrapper.fetch_links(settings.TASKS[1], queries_resumes)
-
+                print "# Total Job Queries (Pending): <{total}>".format(total=total_jobs)
+                link_scrapper.fetch_links(settings.TASKS[0], queries_jobs)
+                print "# Total Resume Queries (Pending): <{total}>".format(total=total_resumes)
+                link_scrapper.fetch_links(settings.TASKS[1], queries_resumes)
 
         elif settings.FOR_JOB or settings.FOR_RESUME:
 
