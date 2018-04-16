@@ -48,18 +48,24 @@ def update_queries(for_task, key, values):
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
-def update_job_scrap(key, values, add=False):
+def update_scrap(for_task, key, values, add=False):
 
     db = connect()
-    collection = db[settings.COL_JOBS]
+
+    if for_task == settings.TASKS[0]:
+        collection = db[settings.COL_JOBS]
+        columns = settings.JOBS_COLUMNS
+    else:
+        collection = db[settings.COL_RESUMES]
+        columns = settings.RESUMES_COLUMNS
     query = {
         settings.UPDATE_KEY: key
     }
     set_value = {
-        settings.JOBS_COLUMNS['scrap']: values['status']
+        columns['scrap']: values['status']
     }
     if add:
-        set_value[settings.JOBS_COLUMNS['html_content']] = values['content']
+        set_value[columns['html_content']] = values['content']
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
@@ -75,21 +81,6 @@ def update_job_parse(key, values, add=False):
     }
     if add:
         set_value[settings.JOBS_COLUMNS['parsed_content']] = values['content']
-    collection.update_one(query, {'$set': set_value}, upsert=False)
-
-
-def update_resume_scrap(key, values, add=False):
-
-    db = connect()
-    collection = db[settings.COL_RESUMES]
-    query = {
-        settings.UPDATE_KEY: key
-    }
-    set_value = {
-        settings.RESUMES_COLUMNS['scrap']: values['status']
-    }
-    if add:
-        set_value[settings.RESUMES_COLUMNS['html_content']] = values['content']
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
