@@ -106,26 +106,21 @@ def fetch_links(for_task, queries):
 
                 starts = pagination.make_start_list(for_task, total_results)
 
+                if settings.MULTIPROCESS_REQUIRED:
+                    pass
+                else:
+                    results = fetch_pool_results(for_task, each_query['queries'], starts)
+
+                db.insert_rows(for_task, results)
+                print "# Done! Total links: {total}".format(total=len(results))
+
             else:
 
                 print "# Result Present: <False>"
 
-            if settings.MULTIPROCESS_REQUIRED:
-                pass
-            else:
-                results = fetch_pool_results(for_task, each_query['queries'], starts)
-
-            db.insert_rows(for_task, results)
             db.update_queries(for_task, each_query['key'], {'status': settings.LINK_EXTRACTION_DONE})
-            print "# Done! Total links: {total}".format(total=len(results))
 
         except Exception as e:
 
             db.update_queries(for_task, each_query['key'], {'status': settings.LINK_EXTRACTION_ERROR})
             print "# Error: {error}".format(error=str(e))
-
-
-
-
-
-
