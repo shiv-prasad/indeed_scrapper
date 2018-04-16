@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 import db
 import pagination
+from multiprocessing import Process
 
 headers = {'User-Agent': UserAgent().chrome}
 
@@ -55,14 +56,14 @@ def fetch_pool_results(for_task, queries, starts):
 
         print "# Results for Page {page_count}: {total}".format(page_count=page_count, total=len(results))
 
-    return final_results
+    db.insert_rows(for_task, final_results)
 
 
 def fetch_links(for_task, queries):
 
     filtered_queries = list(map(lambda query: {
         'queries': query['queries'],
-        'key': str(query['_id'])
+        'key': query['_id']
     }, queries))
 
     for each_query in filtered_queries:
@@ -80,8 +81,6 @@ def fetch_links(for_task, queries):
 
             total_results = 0
             result_present = False
-            starts = []
-            results = []
 
             soup = get_soup(url)
 
@@ -107,12 +106,17 @@ def fetch_links(for_task, queries):
                 starts = pagination.make_start_list(for_task, total_results)
 
                 if settings.MULTIPROCESS_REQUIRED:
-                    pass
+                    partition = int(len(starts)/settings.NO_OF_PROCESSES)
+                    if partition == 0:
+                        partition += 1
+                    start_chunks = [starts[i:i + partition] for i in xrange(0, len(starts), partition)]
+                    processes = [Process(target=fetch_pool_results, args=(for_task, each_query['queries'], each_chunk, )) for each_chunk in start_chunks]
+                    for process in processes:
+                        process.start()
+                    for process in processes:
+                        process.join()
                 else:
-                    results = fetch_pool_results(for_task, each_query['queries'], starts)
-
-                db.insert_rows(for_task, results)
-                print "# Done! Total links: {total}".format(total=len(results))
+                    fetch_pool_results(for_task, each_query['queries'], starts)
 
             else:
 
