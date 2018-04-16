@@ -64,6 +64,6 @@ if __name__ == '__main__':
 
     if resume or job:
         while (True):
-            os.system('cls')
+            os.system('clear')
             fetch_status(job, resume)
             time.sleep(10)
