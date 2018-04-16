@@ -62,8 +62,8 @@ def fetch_pool_results(for_task, queries, starts):
 def fetch_links(for_task, queries):
 
     filtered_queries = list(map(lambda query: {
-        'queries': query['queries'],
-        'key': query['_id']
+        'queries': query[settings.QUERIES_COLUMNS['queries']],
+        'key': query[settings.UPDATE_KEY]
     }, queries))
 
     for each_query in filtered_queries:
