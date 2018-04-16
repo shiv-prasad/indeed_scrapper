@@ -9,13 +9,13 @@ if __name__ == '__main__':
     if settings.WEBDRIVER_REQUIRED:
 
         print "##################################################"
-        print "#    <Execution with Selenium Webdriver>         #"
+        print "# Execution with Selenium Webdriver"
         print "##################################################"
 
     else:
 
         print "##################################################"
-        print "# Execution with Urllib and Beautiful Soup"
+        print "# Execution with Requests and Beautiful Soup"
         print
 
         if settings.FOR_JOB and settings.FOR_RESUME:
