@@ -18,8 +18,8 @@ def fetch_resume_link_url(queries, page_count):
 
 
 def fetch_job_url(link):
-    return "{base_uri}{url}".format(base_uri=settings.JOB_BASE_URL, url=link)
+    return "{base_uri}{url}".format(base_uri=settings.JOB_HTML_BASE_URL, url=link)
 
 
 def fetch_resume_url(link):
-    return "{base_uri}{url}".format(base_uri=settings.RESUME_BASE_URL, url=link)
+    return "{base_uri}{url}".format(base_uri=settings.RESUME_HTML_BASE_URL, url=link)
