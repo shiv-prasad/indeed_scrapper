@@ -6,8 +6,7 @@ TASKS = ["jobs", "resumes"]
 ## Login
 LOGIN_REQUIRED = False
 LOGIN_URL = ""
-LOGIN_USERNAME = ""
-LOGIN_PASSWORD = ""
+LOGIN_DETAILS = []
 
 ## Webdriver
 WEBDRIVER_REQUIRED = False
