@@ -6,19 +6,31 @@ from fake_useragent import UserAgent
 import db
 import pagination
 from multiprocessing import Process
+import browser
 
 headers = {'User-Agent': UserAgent().chrome}
 
 
-def get_soup(url):
+def get_soup(url, driver=None, for_task=None):
 
-    page = requests.get(url, headers=headers)
-    return BeautifulSoup(page.text, 'html.parser')
+    if driver:
+        if for_task == settings.TASKS[1]:
+            class_name = 'app_link'
+        else:
+            class_name = 'turnstileLink'
+        browser.wait_till(driver, 'class', class_name)
+        page = driver.page_source
+    else:
+        page = requests.get(url, headers=headers).text
+    return BeautifulSoup(page, 'html.parser')
 
 
-def get_links_from_page(for_task, url):
+def get_links_from_page(for_task, url=None, driver=None):
 
-    soup = get_soup(url)
+    if driver:
+        soup = get_soup(url, driver=driver, for_task=for_task)
+    else:
+        soup = get_soup(url)
 
     if for_task == settings.TASKS[1]:
         name = 'a'
@@ -40,21 +52,56 @@ def get_links_from_page(for_task, url):
     return results
 
 
-def fetch_pool_results(for_task, queries, starts):
+def fetch_pool_results(for_task, queries, starts, driver=None):
 
     final_results = []
 
-    for page_count in starts:
+    if driver:
 
-        if for_task == settings.TASKS[1]:
-            url = query_builder.fetch_resume_link_url(queries, page_count)
-        else:
-            url = query_builder.fetch_job_link_url(queries, page_count)
+        start_chunks = [starts[i:i + settings.MAX_TABS] for i in xrange(0, len(starts), settings.MAX_TABS)]
 
-        results = get_links_from_page(for_task, url)
-        final_results.extend(results)
+        for each_chunk in start_chunks:
 
-        print "# Results for Page {page_count}: {total}".format(page_count=page_count, total=len(results))
+            main_window = browser.get_main_window(driver)
+            start_indexes = each_chunk
+
+            for j in range(len(each_chunk)):
+
+                if for_task == settings.TASKS[1]:
+                    new_url = query_builder.fetch_resume_link_url(queries, start_indexes[j])
+                else:
+                    new_url = query_builder.fetch_job_link_url(queries, start_indexes[j])
+
+                browser.execute_javascript(driver, 'window.open("{url}","_blank");'.format(url=new_url))
+
+            for each_window in browser.get_window_handles(driver):
+
+                if each_window != main_window:
+
+                    browser.switch_to_window(driver, each_window)
+
+                    results = get_links_from_page(for_task, driver=driver)
+                    final_results.extend(results)
+
+            while len(browser.get_window_handles(driver)) != 1:
+
+                browser.switch_to_window(driver, browser.get_window_handles(driver)[0])
+                browser.close_tab(driver)
+
+            browser.switch_to_window(browser.get_window_handles(driver)[0])
+
+    else:
+        for page_count in starts:
+
+            if for_task == settings.TASKS[1]:
+                url = query_builder.fetch_resume_link_url(queries, page_count)
+            else:
+                url = query_builder.fetch_job_link_url(queries, page_count)
+
+            results = get_links_from_page(for_task, url)
+            final_results.extend(results)
+
+            print "# Results for Page {page_count}: {total}".format(page_count=page_count, total=len(results))
 
     db.insert_rows(for_task, final_results)
 
@@ -82,7 +129,13 @@ def fetch_links(for_task, queries):
             total_results = 0
             result_present = False
 
-            soup = get_soup(url)
+            if settings.WEBDRIVER_REQUIRED:
+                driver = browser.get_browser()
+                browser.open_link(driver, url)
+                soup = get_soup(url, driver=driver, for_task=for_task)
+                browser.close_browser(driver)
+            else:
+                soup = get_soup(url)
 
             if for_task == settings.TASKS[0]:
                 result_divs = soup.find_all(name="div", attrs={"id": "searchCount"})
@@ -110,13 +163,24 @@ def fetch_links(for_task, queries):
                     if partition == 0:
                         partition += 1
                     start_chunks = [starts[i:i + partition] for i in xrange(0, len(starts), partition)]
-                    processes = [Process(target=fetch_pool_results, args=(for_task, each_query['queries'], each_chunk, )) for each_chunk in start_chunks]
+                    if settings.WEBDRIVER_REQUIRED:
+                        driver = browser.get_browser()
+                        processes = [Process(target=fetch_pool_results, args=(for_task, each_query['queries'], each_chunk, driver, )) for each_chunk in start_chunks]
+                    else:
+                        processes = [Process(target=fetch_pool_results, args=(for_task, each_query['queries'], each_chunk,)) for each_chunk in start_chunks]
                     for process in processes:
                         process.start()
                     for process in processes:
                         process.join()
+                    if settings.WEBDRIVER_REQUIRED:
+                        browser.close_browser(driver)
                 else:
-                    fetch_pool_results(for_task, each_query['queries'], starts)
+                    if settings.WEBDRIVER_REQUIRED:
+                        driver = browser.get_browser()
+                        fetch_pool_results(for_task, each_query['queries'], starts, driver)
+                        browser.close_browser(driver)
+                    else:
+                        fetch_pool_results(for_task, each_query['queries'], starts)
 
             else:
 
@@ -128,3 +192,4 @@ def fetch_links(for_task, queries):
 
             db.update_queries(for_task, each_query['key'], {'status': settings.LINK_EXTRACTION_ERROR})
             print "# Error: {error}".format(error=str(e))
+
