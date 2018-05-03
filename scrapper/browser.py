@@ -65,5 +65,41 @@ def get_browser():
         return browser
 
 
-def closeBrowser(browser):
+def open_link(browser, url):
+    browser.get(url)
+
+
+def wait_till(browser, key, value):
+    try:
+        wait = WebDriverWait(browser, 10)
+
+        if key == 'id':
+            wait.until(EC.visibility_of_element_located((By.ID, value)))
+
+        elif key == 'class':
+            wait.until(EC.visibility_of_element_located((By.CLASS_NAME, value)))
+
+    except TimeoutException as e:
+        print "# E: [FIND ELEMENT] {error}".format(error=str(e))
+
+
+def get_main_window(browser):
+    return browser.current_window_handle
+
+
+def execute_javascript(browser, script):
+    browser.execute_script(script)
+
+
+def get_window_handles(browser):
+    return browser.window_handles
+
+
+def switch_to_window(browser, window):
+    browser.switch_to_window(window)
+
+def close_tab(browser):
+    browser.close()
+
+def close_browser(browser):
     browser.quit()
