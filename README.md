@@ -164,7 +164,7 @@ $ python html_parser.py
 
 ## Final Data
 
-Please refer to the sample output data for [Jobs](https://github.com/shiv-param/indeed_scrapper/blob/master/tools/data/jobs.json) and [Resumes](https://github.com/shiv-param/indeed_scrapper/blob/master/tools/data/resumes.json) for your reference 
+Please refer to the sample output data for [Jobs](https://raw.githubusercontent.com/shiv-param/indeed_scrapper/blob/master/tools/data/jobs.json) and [Resumes](https://raw.githubusercontent.com/shiv-param/indeed_scrapper/blob/master/tools/data/resumes.json) for your reference
 
 ## Author
 
