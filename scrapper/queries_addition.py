@@ -28,7 +28,9 @@ def make_job_queries():
             settings.QUERIES_COLUMNS['job_status']: settings.LINK_EXTRACTION_PENDING
         })
 
-    database_methods.insert_queries(queries)
+    # database_methods.insert_queries(queries)
+
+    print "# O: [Added] <{total} Queries>".format(total=len(queries))
 
 
 def make_resume_queries():
@@ -55,13 +57,25 @@ def make_resume_queries():
             settings.QUERIES_COLUMNS['resume_status']: settings.LINK_EXTRACTION_PENDING
         })
 
-    database_methods.insert_queries(queries)
+    # database_methods.insert_queries(queries)
+
+    print "# O: [Added] <{total} Queries>".format(total=len(queries))
 
 
 if __name__ == '__main__':
 
+    print "##################################################"
+    print
+
     if settings.FOR_JOB:
+
+        print "# P: [Adding] <Jobs Queries>"
         make_job_queries()
 
     if settings.FOR_RESUME:
+
+        print "# P: [Adding] <Resumes Queries>"
         make_resume_queries()
+
+    print
+    print "##################################################"

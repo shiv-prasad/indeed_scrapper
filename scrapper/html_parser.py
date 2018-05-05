@@ -30,7 +30,7 @@ def parse_pool_results(for_task, queries):
         try:
             url = each_query['url']
             html = each_query['html']
-            print "# Parsing for URL: {url}".format(url=url)
+            print "# P: [Parsing] <{url}>".format(url=url)
 
             if for_task == settings.TASKS[0]:
 
@@ -47,7 +47,7 @@ def parse_pool_results(for_task, queries):
                     for each_job_title in job_titles:
                         job_title = each_job_title.text.strip()
                 except Exception as e:
-                    print "# E [Job Title]: {error}".format(error=str(e))
+                    print "# E: [Job Title] <{error}>".format(error=str(e))
 
                 try:
                     companies = soup.find_all('span', attrs={'class': 'company'})
@@ -55,7 +55,7 @@ def parse_pool_results(for_task, queries):
                         company = each_company.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Company]: {error}".format(error=str(e))
+                    print "# E: [Company] <{error}>".format(error=str(e))
 
                 try:
                     locations = soup.find_all('span', attrs={'class': 'location'})
@@ -63,7 +63,7 @@ def parse_pool_results(for_task, queries):
                         location = each_location.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Location]: {error}".format(error=str(e))
+                    print "# E: [Location]: <{error}>".format(error=str(e))
 
                 try:
                     summaries = soup.find_all('span', attrs={'id': 'job_summary'})
@@ -71,7 +71,7 @@ def parse_pool_results(for_task, queries):
                         job_summary = each_summary.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Job Summary]: {error}".format(error=str(e))
+                    print "# E: [Job Summary]: <{error}>".format(error=str(e))
 
                 if job_title:
                     content['job_title'] = job_title
@@ -103,7 +103,7 @@ def parse_pool_results(for_task, queries):
                         resume_title = each_resume_title.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Resume Title]: {error}".format(error=str(e))
+                    print "# E: [Resume Title] <{error}>".format(error=str(e))
 
                 try:
                     headlines = soup.find_all('h2', attrs={'id': 'headline'})
@@ -111,7 +111,7 @@ def parse_pool_results(for_task, queries):
                         headline = each_headline.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Headline]: {error}".format(error=str(e))
+                    print "# E: [Headline] <{error}>".format(error=str(e))
 
                 try:
                     contact_infos = soup.find_all('div', attrs={'id': 'contact_info_container'})
@@ -119,7 +119,7 @@ def parse_pool_results(for_task, queries):
                         contact_info = each_contact_info.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Contact Info]: {error}".format(error=str(e))
+                    print "# E: [Contact Info] <{error}>".format(error=str(e))
 
                 try:
                     res_summaries = soup.find_all('p', attrs={'id': 'res_summary'})
@@ -127,7 +127,7 @@ def parse_pool_results(for_task, queries):
                         res_summary = each_summary.text.strip()
                         break
                 except Exception as e:
-                    print "# E [Res Summary]: {error}".format(error=str(e))
+                    print "# E: [Res Summary] <{error}>".format(error=str(e))
 
                 try:
                     work_experience_contents = soup.find_all('div', attrs={'class': 'workExperience-content'})
@@ -149,7 +149,7 @@ def parse_pool_results(for_task, queries):
                                 work['description'] = each_description.text.strip()
                             work_experience.append(work)
                 except Exception as e:
-                    print "# E [Work Experience]: {error}".format(error=str(e))
+                    print "# E: [Work Experience] <{error}>".format(error=str(e))
 
                 try:
                     education_contents = soup.find_all('div', attrs={'class': 'education-content'})
@@ -171,7 +171,7 @@ def parse_pool_results(for_task, queries):
                                 education_item['description'] = each_description.text.strip()
                             education.append(education_item)
                 except Exception as e:
-                    print "# E [Education]: {error}".format(error=str(e))
+                    print "# E: [Education] <{error}>".format(error=str(e))
 
                 try:
                     skill_contents = soup.find_all('div', attrs={'class': 'skills-content'})
@@ -182,7 +182,7 @@ def parse_pool_results(for_task, queries):
                             for each_text in skill_texts:
                                 skills.append(each_text.text.strip())
                 except Exception as e:
-                    print "# E [Skills]: {error}".format(error=str(e))
+                    print "# E: [Skills] <{error}>".format(error=str(e))
 
                 try:
                     links_contents = soup.find_all('div', attrs={'class': 'links-content'})
@@ -193,7 +193,7 @@ def parse_pool_results(for_task, queries):
                             for each_text in links_texts:
                                 links.append(each_text.text.strip())
                 except Exception as e:
-                    print "# E [Links]: {error}".format(error=str(e))
+                    print "# E: [Links] <{error}>".format(error=str(e))
 
                 try:
                     awards_contents = soup.find_all('div', attrs={'class': 'awards-content'})
@@ -212,7 +212,7 @@ def parse_pool_results(for_task, queries):
                                 award_item['description'] = each_description.text.strip()
                             awards.append(award_item)
                 except Exception as e:
-                    print "# E [Awards]: {error}".format(error=str(e))
+                    print "# E: [Awards] <{error}>".format(error=str(e))
 
                 try:
                     additionalInfo_contents = soup.find_all('div', attrs={'class': 'additionalInfo-content'})
@@ -221,7 +221,7 @@ def parse_pool_results(for_task, queries):
                         for each_section in additionalinfo_sections:
                             additional_info = each_section.text.strip()
                 except Exception as e:
-                    print "# E [Work Experience]: {error}".format(error=str(e))
+                    print "# E: [Work Experience] <{error}>".format(error=str(e))
 
                 if resume_title:
                     content['resume_title'] = resume_title
@@ -245,12 +245,12 @@ def parse_pool_results(for_task, queries):
                     content['additional_info'] = additional_info
 
             database_methods.update_parse(for_task, each_query['key'], {'status': settings.HTML_PARSING_DONE, 'content': content}, add=True)
-            print "# Done!"
+            print "# O: [Parsing] <Done>"
 
         except Exception as e:
 
             database_methods.update_parse(for_task, each_query['key'], {'status': settings.HTML_PARSING_ERROR})
-            print "# Error: {error}".format(error=str(e))
+            print "# E: [Parsing] <{error}>".format(error=str(e))
 
 
 def parse_html(for_task, html_queries):
@@ -293,40 +293,41 @@ def parse_html(for_task, html_queries):
 if __name__ == '__main__':
 
     print "##################################################"
-    print "# Execution with Beautiful Soup"
+    print
+    print "# I: [Execution] Beautiful Soup"
     print
 
     if settings.FOR_JOB and settings.FOR_RESUME:
 
-        print "# For: <Jobs and Resumes>"
+        print "# I: [For] <Jobs and Resumes>"
 
         parse_jobs, total_jobs = database_methods.fetch_rows(query_for="job_parse", status_for="pending")
         parse_resumes, total_resumes = database_methods.fetch_rows(query_for="resume_parse", status_for="pending")
 
         if settings.MULTIPROCESS_REQUIRED:
 
-            print "# Multiprocessing: <True>"
+            print "# I: [Multiprocessing] <True>"
 
             if settings.MULTIPROCESS_TYPE == "sequential":
 
-                print "# Type: <Sequential>"
-                print "# Flow: <Jobs -> Resumes>"
-                print "# No. of processes for each flow: <{processes}>".format(processes=settings.NO_OF_PROCESSES)
+                print "# I: [Type] <Sequential>"
+                print "# I: [Flow] <Jobs -> Resumes>"
+                print "# I: [No. of Processes] <{processes}> (For each flow)".format(processes=settings.NO_OF_PROCESSES)
 
-                print "# Total Job HTMLs (Pending): <{total}>".format(total=total_jobs)
+                print "# I: [Total Job HTMLs] <{total}> (Pending)".format(total=total_jobs)
                 parse_html(settings.TASKS[0], parse_jobs)
-                print "# Total Resume HTMLs (Pending): <{total}>".format(total=total_resumes)
+                print "# I: [Total Resume HTMLs]<{total}> (Pending)".format(total=total_resumes)
                 parse_html(settings.TASKS[1], parse_resumes)
 
             else:
 
-                print "# Type: <Shared>"
-                print "# Flow: <Jobs and Resumes as different processes>"
-                print "# No. of processes: <2>"
-                print "# No. of processes for each flow: <{processes}>".format(processes=settings.NO_OF_PROCESSES)
+                print "# I: [Type] <Shared>"
+                print "# I: [Flow] <Jobs and Resumes as different processes>"
+                print "# I: [No. of Processes] <2>"
+                print "# I: [No. of Processes] <{processes}> (For each flow)".format(processes=settings.NO_OF_PROCESSES)
 
-                print "# Total Job HTMLs (Pending): <{total}>".format(total=total_jobs)
-                print "# Total Resume HTMLs (Pending): <{total}>".format(total=total_resumes)
+                print "# I: [Total Job HTMLs] <{total}> (Pending)".format(total=total_jobs)
+                print "# I: [Total Resume HTMLs] <{total}> (Pending)".format(total=total_resumes)
                 job_process = Process(target=parse_html, args=(settings.TASKS[0], parse_jobs,))
                 resume_process = Process(target=parse_html, args=(settings.TASKS[1], parse_resumes,))
 
@@ -337,12 +338,12 @@ if __name__ == '__main__':
 
         else:
 
-            print "# Multiprocessing: <False>"
-            print "# Flow: <Jobs -> Resumes>"
+            print "# I: [Multiprocessing] <False>"
+            print "# I: [Flow] <Jobs -> Resumes>"
 
-            print "# Total Job HTMLs (Pending): <{total}>".format(total=total_jobs)
+            print "# I: [Total Job HTMLs] <{total}> (Pending)".format(total=total_jobs)
             parse_html(settings.TASKS[0], parse_jobs)
-            print "# Total Resume HTMLs (Pending): <{total}>".format(total=total_resumes)
+            print "# I: [Total Resume HTMLs] <{total}> (Pending)".format(total=total_resumes)
             parse_html(settings.TASKS[1], parse_resumes)
 
     elif settings.FOR_JOB or settings.FOR_RESUME:
@@ -351,25 +352,26 @@ if __name__ == '__main__':
 
             task_for = settings.TASKS[0]
             parse, total = database_methods.fetch_rows(query_for="job_parse", status_for="pending")
-            print "# For: <Jobs>"
+            print "# I: [For] <Jobs>"
 
         elif settings.FOR_RESUME:
 
             task_for = settings.TASKS[1]
             parse, total = database_methods.fetch_rows(query_for="resume_parse", status_for="pending")
-            print "# For: <Resumes>"
+            print "# I: [For] <Resumes>"
 
         if settings.MULTIPROCESS_REQUIRED:
 
-            print "# Multiprocessing: <True>"
-            print "# No. of processes: <{processes}>".format(processes=settings.NO_OF_PROCESSES)
+            print "# I: [Multiprocessing] <True>"
+            print "# I: [No. of Processes] <{processes}>".format(processes=settings.NO_OF_PROCESSES)
 
         else:
 
-            print "# Multiprocessing: <False>"
+            print "# I: [Multiprocessing] <False>"
 
-        print "# Total HTMLs (Pending): <{total}>".format(total=total)
+        print "# I: [Total HTMLs] <{total}> (Pending)".format(total=total)
         parse_html(task_for, parse)
 
+    print
     print "##################################################"
 

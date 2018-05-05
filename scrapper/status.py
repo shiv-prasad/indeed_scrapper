@@ -56,11 +56,11 @@ def fetch_status(job, resume):
         table_resume.add_row(["Done", rq_d, rs_d, rp_d])
 
     if job:
-        print "Jobs:"
+        print "--Jobs--"
         print table_jobs
         print
     if resume:
-        print "Resumes:"
+        print "--Resumes--"
         print table_resume
 
 

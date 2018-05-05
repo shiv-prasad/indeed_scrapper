@@ -80,7 +80,7 @@ def fetch_pool_results(for_task, queries, starts, driver=None):
     :param queries: list of all the queries
     :param starts: pagination values
     :param driver: Webdriver instance (optional)
-    :return:
+    :return: Null
     """
 
     final_results = []
@@ -112,6 +112,8 @@ def fetch_pool_results(for_task, queries, starts, driver=None):
                     results = get_links_from_page(for_task, driver=driver)
                     final_results.extend(results)
 
+                    print "# O: [Results] <{total}>".format(total=len(results))
+
             while len(browser.get_window_handles(driver)) != 1:
 
                 browser.switch_to_window(driver, browser.get_window_handles(driver)[0])
@@ -120,6 +122,7 @@ def fetch_pool_results(for_task, queries, starts, driver=None):
             browser.switch_to_window(browser.get_window_handles(driver)[0])
 
     else:
+
         for page_count in starts:
 
             if for_task == settings.TASKS[1]:
@@ -130,7 +133,7 @@ def fetch_pool_results(for_task, queries, starts, driver=None):
             results = get_links_from_page(for_task, url)
             final_results.extend(results)
 
-            print "# Results for Page {page_count}: {total}".format(page_count=page_count, total=len(results))
+            print "# O: [Results] <for Page {page_count}: {total}>".format(page_count=page_count, total=len(results))
 
     db.insert_rows(for_task, final_results)
 
@@ -155,13 +158,13 @@ def fetch_links(for_task, queries):
         try:
 
             print
-            print "# Query {query}".format(query=each_query['queries'])
+            print "# P: [Query] {query}".format(query=each_query['queries'])
 
             if for_task == settings.TASKS[0]:
                 url = query_builder.fetch_job_link_url(each_query['queries'], 0)
             else:
                 url = query_builder.fetch_resume_link_url(each_query['queries'], 0)
-            print "# Url: {url}".format(url=url)
+            print "# P: [Url] {url}".format(url=url)
 
             total_results = 0
             result_present = False
@@ -190,8 +193,8 @@ def fetch_links(for_task, queries):
 
             if result_present:
 
-                print "# Result Present: <True>"
-                print "# Total Results: <{total}>".format(total=total_results)
+                print "# O: [Result Present] <True>"
+                print "# I: [Total Results] <{total}>".format(total=total_results)
 
                 starts = pagination.make_start_list(for_task, total_results)
 
@@ -221,12 +224,12 @@ def fetch_links(for_task, queries):
 
             else:
 
-                print "# Result Present: <False>"
+                print "# O: [Result Present] <False>"
 
             db.update_queries(for_task, each_query['key'], {'status': settings.LINK_EXTRACTION_DONE})
 
         except Exception as e:
 
             db.update_queries(for_task, each_query['key'], {'status': settings.LINK_EXTRACTION_ERROR})
-            print "# Error: {error}".format(error=str(e))
+            print "# E: [Link Extraction] <{error}>".format(error=str(e))
 

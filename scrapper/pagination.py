@@ -23,13 +23,13 @@ def make_start_list(for_task, total_results):
 
     if total_results > max_results:
         total_results = max_results - 1
-        print "# {max}+ results found. Fetching first {total} results".format(max=max_results, total=total_results + 1)
+        print "# I: [Pagination] <{max}+ results found. Fetching first {total} results>".format(max=max_results, total=total_results + 1)
 
     total_pages = (total_results / max_page_results)
     if total_results % max_page_results > 0:
         total_pages += 1
 
-    print "# Total Pages: <{total}>".format(total=total_pages)
+    print "# I: [Pagination] <Total Pages: {total}>".format(total=total_pages)
 
     for i in range(0, total_pages):
         starts.append(max_page_results * i)

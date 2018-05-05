@@ -69,7 +69,7 @@ def wait_till(browser, key, value):
 
     except TimeoutException as e:
 
-        print "# E: [FIND ELEMENT] {error}".format(error=str(e))
+        print "# E: [Find Element] <{error}>".format(error=str(e))
         return False
 
 
@@ -115,7 +115,7 @@ def find_elements(browser, key, value):
 
     except Exception as e:
 
-        print "# E: [FIND ELEMENT] {error}".format(error=str(e))
+        print "# E: [Find Element] <{error}>".format(error=str(e))
         return None
 
 
@@ -233,7 +233,7 @@ def login(browser, username_str, password_str):
 
     else:
 
-        print "Timed out waiting for page to load"
+        print "E: [Waiting] Timed out waiting for page to load"
 
         browser.quit()
         return None
@@ -255,30 +255,26 @@ def get_browser():
 
         if username and password:
 
-            print "##################################################"
-            print "Execution Running with login"
+            print "I: [Webdriver Execution] Running with login"
             print
-            print "Username: {username}".format(username=username)
-            print "Password: {password}".format(password=password)
-            print "##################################################"
+            print "I: [Username] <{username}>".format(username=username)
+            print "I: [Password] <{password}>".format(password=password)
 
             logged_in_browser = login(browser, username, password)
 
             if logged_in_browser:
+                print "O: [Login Success] <Done>"
                 return logged_in_browser
 
             else:
-                print "Problem in logging in (Check your username and password or internet connection)"
+                print "E: [Login Error] <Problem in logging in (Check your username and password or internet connection)>"
                 return None
 
         else:
-            print "Login Credentials not provided."
+            print "E: [Login Error] <Login Credentials not provided.>"
             return None
 
     else:
 
-        print "##################################################"
-        print "Execution Running without login"
-        print "##################################################"
-
+        print "I: [Webdriver Execution] Running without login"
         return browser

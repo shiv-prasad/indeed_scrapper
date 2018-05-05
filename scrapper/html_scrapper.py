@@ -22,14 +22,18 @@ def get_soup(url, driver=None, for_task=None):
     """
 
     if driver:
+
         if for_task == settings.TASKS[1]:
             id_name = 'resume_body'
         else:
             id_name = 'job-content'
+
         browser.wait_till(driver, 'id', id_name)
         page = driver.page_source
+
     else:
         page = requests.get(url, headers=headers).text
+
     return BeautifulSoup(page, 'html.parser')
 
 
@@ -77,12 +81,12 @@ def fetch_pool_results(for_task, queries, driver=None):
 
                         content = str(get_soup(new_url, driver=driver, for_task=for_task).find(name=name, attrs=attrs))
                         db.update_scrap(for_task, start_indexes[j]['key'], {'status': settings.HTML_EXTRACTION_DONE, 'content': content}, add=True)
-                        print "# Done!"
+                        print "# O: [Fetch HTML Results] <Done>"
 
                     except Exception as e:
 
                         db.update_scrap(for_task, start_indexes[j]['key'], {'status': settings.HTML_EXTRACTION_ERROR})
-                        print "# Error: {error}".format(error=str(e))
+                        print "# E: [Fetch HTML Results] <{error}>".format(error=str(e))
 
             while len(browser.get_window_handles(driver)) != 1:
                 browser.switch_to_window(driver, browser.get_window_handles(driver)[0])
@@ -93,7 +97,9 @@ def fetch_pool_results(for_task, queries, driver=None):
     else:
 
         for each_query in queries:
+
             try:
+
                 if for_task == settings.TASKS[0]:
                     url = query_builder.fetch_job_url(each_query['url'])
                     name = "table"
@@ -103,15 +109,15 @@ def fetch_pool_results(for_task, queries, driver=None):
                     name = "div"
                     attrs = {'id': 'resume_body'}
 
-                print "# URL: {url}".format(url=url)
+                print "# I: [URL] {url}".format(url=url)
                 content = str(get_soup(url).find(name=name, attrs=attrs))
                 db.update_scrap(for_task, each_query['key'], {'status': settings.HTML_EXTRACTION_DONE, 'content': content}, add=True)
-                print "# Done!"
+                print "# O: [Fetch HTML Results] <Done>!"
 
             except Exception as e:
 
                 db.update_scrap(for_task, each_query['key'], {'status': settings.HTML_EXTRACTION_ERROR})
-                print "# Error: {error}".format(error=str(e))
+                print "# E: [Fetch HTML Results] {error}".format(error=str(e))
 
 
 def fetch_html(for_task, queries):
