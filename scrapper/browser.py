@@ -246,8 +246,12 @@ def get_browser():
 
     :return: Webdriver instance (Logged in if required)
     """
-
-    browser = webdriver.PhantomJS(executable_path=settings.WEBDRIVER_EXECUTABLE_PATH)
+    if settings.WEBDRIVER_TYPE == 'chrome':
+        browser = webdriver.Chrome(executable_path=settings.WEBDRIVER_EXECUTABLE_PATH)
+    elif settings.WEBDRIVER_TYPE == 'firefox':
+        browser = webdriver.Firefox(executable_path=settings.WEBDRIVER_EXECUTABLE_PATH)
+    elif settings.WEBDRIVER_TYPE == 'phantom':
+        browser = webdriver.PhantomJS(executable_path=settings.WEBDRIVER_EXECUTABLE_PATH)
 
     if settings.LOGIN_REQUIRED:
 

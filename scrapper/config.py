@@ -12,6 +12,7 @@ LOGIN_DETAILS = []  # List of login credentials eg [{'username': 'someone@exampl
 
 ## Webdriver
 WEBDRIVER_REQUIRED = False
+WEBDRIVER_TYPE = ""  # Use 'chrome', 'firefox' and 'phantom' for Chrome, Firefox and PhantomJS Webdrivers respectively
 WEBDRIVER_EXECUTABLE_PATH = "path to executable webdriver"
 MAX_TABS = 10
 
