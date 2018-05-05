@@ -6,6 +6,13 @@ import os
 
 def fetch_status(job, resume):
 
+    """
+    Status for various process [count of documents in "Pending", "Error" or "Done" state]
+    :param job: flag for job process
+    :param resume: flag for resume process
+    :return: Null
+    """
+
     # Link extraction
     if resume:
         rq_p = db.fetch_count('resume_queries', 'pending')

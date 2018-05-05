@@ -3,6 +3,14 @@ import config as settings
 
 def make_start_list(for_task, total_results):
 
+    """
+    Make list of all pagination possibles for a given number of results
+
+    :param for_task: process for jobs/resumes
+    :param total_results: total no of results to be fetched
+    :return: list of pagination values [0, 10, 20.....]
+    """
+
     starts = []
 
     if for_task == settings.TASKS[1]:

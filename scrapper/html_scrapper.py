@@ -12,6 +12,15 @@ headers = {'User-Agent': UserAgent().chrome}
 
 def get_soup(url, driver=None, for_task=None):
 
+    """
+    Fetch soup for the webpage opened. if webdriver given then process will be selenium automation otherwise requests
+
+    :param url: url of the webpage
+    :param driver: Webdriver instance (optional)
+    :param for_task: process for jobs/resumes
+    :return: soup for the webpage opened
+    """
+
     if driver:
         if for_task == settings.TASKS[1]:
             id_name = 'resume_body'
@@ -25,6 +34,15 @@ def get_soup(url, driver=None, for_task=None):
 
 
 def fetch_pool_results(for_task, queries, driver=None):
+
+    """
+    Fetch html pages for the provided queries and save to database. if webdriver given then process will be selenium automation otherwise requests
+
+    :param for_task: process for jobs/resumes
+    :param queries: set of queries for which html have to be extracted
+    :param driver: Webdriver instance (optional)
+    :return: Null
+    """
 
     if driver:
 
@@ -97,6 +115,14 @@ def fetch_pool_results(for_task, queries, driver=None):
 
 
 def fetch_html(for_task, queries):
+
+    """
+    Mail caller for html fetching.
+
+    :param for_task: process for jobs/resumes
+    :param queries: all the queries for which html have to be extracted
+    :return: Null
+    """
 
     if for_task == settings.TASKS[0]:
         columns = settings.JOBS_COLUMNS

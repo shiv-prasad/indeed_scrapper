@@ -5,10 +5,26 @@ from bs4 import BeautifulSoup
 
 
 def get_soup(html):
+
+    """
+    Return soup object from html text provided
+
+    :param html: html to be converted to soup object
+    :return: soup object
+    """
+
     return BeautifulSoup(html, 'html.parser')
 
 
 def parse_pool_results(for_task, queries):
+
+    """
+    Parsing of html pages provided
+
+    :param for_task: process for jobs/resumes
+    :param queries: list of queries for which HTML have to be parsed
+    :return: Null
+    """
 
     for each_query in queries:
         try:
@@ -238,6 +254,14 @@ def parse_pool_results(for_task, queries):
 
 
 def parse_html(for_task, html_queries):
+
+    """
+    Mail caller for parsing all the html pages given
+
+    :param for_task: process for job/resumes
+    :param html_queries: list of all HTML queries
+    :return: Null
+    """
 
     if for_task == settings.TASKS[0]:
         columns = settings.JOBS_COLUMNS

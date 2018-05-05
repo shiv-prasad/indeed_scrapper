@@ -6,6 +6,12 @@ import db as database_methods
 
 def make_job_queries():
 
+    """
+    Add queries for jobs from csv to database
+
+    :return: Null
+    """
+
     queries = []
     keys = settings.JOB_QUERIES_COLUMNS
 
@@ -26,6 +32,12 @@ def make_job_queries():
 
 
 def make_resume_queries():
+
+    """
+    Add queries for resumes from csv to database
+
+    :return: Null
+    """
 
     queries = []
     keys = settings.RESUME_QUERIES_COLUMNS

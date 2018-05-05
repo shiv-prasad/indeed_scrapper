@@ -13,6 +13,15 @@ headers = {'User-Agent': UserAgent().chrome}
 
 def get_soup(url, driver=None, for_task=None):
 
+    """
+    Fetch soup for the webpage opened. if webdriver given then process will be selenium automation otherwise requests
+
+    :param url: url of the webpage
+    :param driver: Webdriver instance (optional)
+    :param for_task: process for jobs/resumes
+    :return: soup for the webpage opened
+    """
+
     if driver:
         if for_task == settings.TASKS[1]:
             class_name = 'app_link'
@@ -22,10 +31,20 @@ def get_soup(url, driver=None, for_task=None):
         page = driver.page_source
     else:
         page = requests.get(url, headers=headers).text
+
     return BeautifulSoup(page, 'html.parser')
 
 
 def get_links_from_page(for_task, url=None, driver=None):
+
+    """
+    Get all the links for the url provided
+
+    :param for_task: process for jobs/resumes
+    :param url: query url for which links should be fetched
+    :param driver: process for jobs/resumes
+    :return: all the links found on the webpage
+    """
 
     if driver:
         soup = get_soup(url, driver=driver, for_task=for_task)
@@ -53,6 +72,16 @@ def get_links_from_page(for_task, url=None, driver=None):
 
 
 def fetch_pool_results(for_task, queries, starts, driver=None):
+
+    """
+    Fetch all the links for the list of queries provided
+
+    :param for_task: process for jobs/resumes
+    :param queries: list of all the queries
+    :param starts: pagination values
+    :param driver: Webdriver instance (optional)
+    :return:
+    """
 
     final_results = []
 
@@ -107,6 +136,14 @@ def fetch_pool_results(for_task, queries, starts, driver=None):
 
 
 def fetch_links(for_task, queries):
+
+    """
+    Main caller for the links extraction process
+
+    :param for_task: process for jobs/resumes
+    :param queries: list of all the queries
+    :return: Null
+    """
 
     filtered_queries = list(map(lambda query: {
         'queries': query[settings.QUERIES_COLUMNS['queries']],
