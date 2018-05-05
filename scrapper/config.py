@@ -3,35 +3,40 @@ FOR_RESUME = False
 FOR_JOB = False
 TASKS = ["jobs", "resumes"]
 
+
 ## Login
 LOGIN_REQUIRED = False
-LOGIN_URL = ""
-LOGIN_DETAILS = []
+LOGIN_URL = "indeed login page URL"
+LOGIN_DETAILS = []  # List of login credentials eg [{'username': 'someone@example.com', 'password': 'password'} ... ]
+
 
 ## Webdriver
 WEBDRIVER_REQUIRED = False
-WEBDRIVER_EXECUTABLE_PATH = ""
+WEBDRIVER_EXECUTABLE_PATH = "path to executable webdriver"
 MAX_TABS = 10
+
 
 ## Multiprocessing
 MULTIPROCESS_REQUIRED = False
 MULTIPROCESS_TYPE = ""  # sequential | shared
 NO_OF_PROCESSES = 10
 
+
 ## Base urls
-JOB_BASE_URL = ""
-RESUME_BASE_URL = ""
-JOB_HTML_BASE_URL = ""
-RESUME_HTML_BASE_URL = ""
+JOB_BASE_URL = "url path to job result page"  # eg: "https://www.indeed.co.in/jobs"
+RESUME_BASE_URL = "url path to resume result page"  # eg: "https://www.indeed.com/resumes"
+JOB_HTML_BASE_URL = "url path to job page"  # eg: "https://www.indeed.co.in"
+RESUME_HTML_BASE_URL = "url path to resume page"  # eg: "http://www.indeed.com"
+
 
 ## Queries Files
 JOB_QUERIES_INPUT_CSV_PATH = "path to csv containing job related queries"
-JOB_QUERIES_COLUMNS = []
+JOB_QUERIES_COLUMNS = []  # ["q","l"]
 RESUME_QUERIES_INPUT_CSV_PATH = "path to csv containing resume related queries"
-RESUME_QUERIES_COLUMNS = []
+RESUME_QUERIES_COLUMNS = []  # ["q","l"]
+
 
 ## Database Settings
-
 # Basic
 HOST = ""
 PORT = ""
@@ -71,16 +76,20 @@ HTML_PARSING_PENDING = "0"
 HTML_PARSING_ERROR = "1"
 HTML_PARSING_DONE = "2"
 
+
 ## Results
 # Result per page
 MAX_RESULTS_PER_JOB_PAGE = 10
 MAX_RESULTS_PER_RESUME_PAGE = 50
+
 # Pagination
 MAX_PAGINATION_JOBS = 100
+
 if LOGIN_REQUIRED:
     MAX_PAGINATION_RESUMES = 100
 else:
     MAX_PAGINATION_RESUMES = 20
+
 # Total results
 MAX_RESULTS_FOR_JOB = (MAX_PAGINATION_JOBS * MAX_RESULTS_PER_JOB_PAGE)
 MAX_RESULTS_FOR_RESUME = (MAX_PAGINATION_RESUMES * MAX_RESULTS_PER_RESUME_PAGE)
