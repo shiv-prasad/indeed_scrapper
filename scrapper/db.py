@@ -66,36 +66,28 @@ def update_scrap(for_task, key, values, add=False):
     }
     if add:
         set_value[columns['html_content']] = values['content']
+        set_value[columns['parse']] = settings.HTML_PARSING_PENDING
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
-def update_job_parse(key, values, add=False):
+def update_parse(for_task, key, values, add=False):
 
     db = connect()
-    collection = db[settings.COL_JOBS]
+
+    if for_task == settings.TASKS[0]:
+        collection = db[settings.COL_JOBS]
+        columns = settings.JOBS_COLUMNS
+    else:
+        collection = db[settings.COL_RESUMES]
+        columns = settings.RESUMES_COLUMNS
     query = {
         settings.UPDATE_KEY: key
     }
     set_value = {
-        settings.JOBS_COLUMNS['parse']: values['status']
+        columns['parse']: values['status']
     }
     if add:
-        set_value[settings.JOBS_COLUMNS['parsed_content']] = values['content']
-    collection.update_one(query, {'$set': set_value}, upsert=False)
-
-
-def update_resume_parse(key, values, add=False):
-
-    db = connect()
-    collection = db[settings.COL_RESUMES]
-    query = {
-        settings.UPDATE_KEY: key
-    }
-    set_value = {
-        settings.RESUMES_COLUMNS['parse']: values['status']
-    }
-    if add:
-        set_value[settings.RESUMES_COLUMNS['parsed_content']] = values['content']
+        set_value[columns['parsed_content']] = values['content']
     collection.update_one(query, {'$set': set_value}, upsert=False)
 
 
