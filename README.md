@@ -127,7 +127,7 @@ COL_RESUMES = "" # Your Resume Collection Name
 
 Now we are ready with our configuration for the project.
 
-## Running our codes
+## Execution
 
 The basic flow of our codes is:
 ```
