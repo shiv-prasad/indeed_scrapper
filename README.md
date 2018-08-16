@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Setup the project
 
-* Clone the [Repository](https://github.com/shiv-param/indeed_scrapper) 
+* Clone the [Repository](https://github.com/shiv-prasad/indeed_scrapper) 
 ```
 $ git clone https://github.com/shiv-param/indeed_scrapper
 ```
@@ -164,8 +164,8 @@ $ python html_parser.py
 
 ## Final Data
 
-Please refer to the sample output data for [Jobs](https://raw.githubusercontent.com/shiv-param/indeed_scrapper/blob/master/tools/data/jobs.json) and [Resumes](https://raw.githubusercontent.com/shiv-param/indeed_scrapper/blob/master/tools/data/resumes.json) for your reference
+Please refer to the sample output data for [Jobs](https://raw.githubusercontent.com/shiv-prasad/indeed_scrapper/blob/master/tools/data/jobs.json) and [Resumes](https://raw.githubusercontent.com/shiv-prasad/indeed_scrapper/blob/master/tools/data/resumes.json) for your reference
 
 ## Author
 
-* **Shiv Prasad** - *Initial work* - [shiv-param](https://github.com/shiv-param/)
+* **Shiv Prasad** - *Initial work* - [shiv-prasad](https://github.com/shiv-prasad/)
